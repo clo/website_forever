@@ -1,40 +1,74 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
-<title>Erich Zbinden Hallenturnier 2015</title> 
+<title>-Erich Zbinden Hallenturnier 2015</title> 
 <script>
 
 var i=0;
 var webpageArray = [
-// from, to,    ,url
-'08:00','22:00','http://localhost/joomla_hallenturnier/index.php/impressionen',
-'08:15','16:10','http://localhost/joomla_hallenturnier/index.php/spielbetrieb/spielbetrieb-vorrunde',
-'12:00','16.10','http://localhost/joomla_hallenturnier/index.php/rangliste-vorrunde',
-'16:20','17:00','http://localhost/joomla_hallenturnier/index.php/spielbetrieb/spielbetrieb-final',
-'16:20','18:00','http://localhost/joomla_hallenturnier/index.php/schlussrangliste',
-'10:00','13:00','http://localhost/joomla_hallenturnier/index.php/essensplan',
-]
-setInterval(openUrl, 10000); // Wait 10 seconds
+  // from, to,    ,url
+  ['05:00','22:00','http://localhost/joomla_hallenturnier/index.php/impressionen-june'],
+  ['05:00','22:00','http://localhost/joomla_hallenturnier/index.php/impressionen-junf'],
+  ['06:50','16:10','http://localhost/joomla_hallenturnier/index.php/spielbetrieb/spielbetrieb-vorrunde'],
+  ['13:45','15.00','http://localhost/joomla_hallenturnier/index.php/spielbetrieb/rangliste-vorrunde'],
+  ['16:20','17:00','http://localhost/joomla_hallenturnier/index.php/spielbetrieb/spielbetrieb-final'],
+  ['16:20','18:00','http://localhost/joomla_hallenturnier/index.php/schlussrangliste'],
+  ['05:00','13:00','http://localhost/joomla_hallenturnier/index.php/essensplan'],
+];
+var webPageToShow = [];
+
+setInterval(openUrl, 30000); // Wait 10 seconds
+setInterval(buildArray,1000);
 function openUrl(){
-   console.log('i=' + i + ' = ' + webpageArray[i]);
-   if (i>=webpageArray.length){
+   
+   //buildArray();
+   //if (!webPageToShow){
+   //  return false;
+   //}
+   
+   console.log('i=' + i + ' = ' + webPageToShow[i]);
+   if (i>=webPageToShow.length){
      i=0;
    }
    var iframe = document.getElementById("myframe");
-   iframe.src = webpageArray[i][3];
-   //setTimeout(openUrl(i,webpageArray),5000);
+   iframe.src = webPageToShow[i];  
+	  
    i++;
    return false;
 }
 
-/*function loadNextPage(dir) {   
-	cnt+=dir;
-	if (cnt<0) cnt=webpageArray.length-1; // wrap
-	else if (cnt>= webpageArray.length) cnt=0; // wrap
-	var iframe = document.getElementById("myframe"); 
-	iframe.src = webpageArray[cnt]; 
-	return false; // mandatory!
-} */
+function buildArray(){
+  // check if time is ready to show
+  console.log('buildArray');
+  var webPageToShowNew = [];
+  for (var i=0;i<webpageArray.length;i++){
+    var start = webpageArray[i][0];
+    var end   = webpageArray[i][1];
+    var now   = new Date();
+    var nowHours = now.getHours();
+    var nowMinutes = now.getMinutes();
+    var nowInMin = (nowHours) * 60 + nowMinutes;
+    
+	var startInMin = calcMin(start);
+    var endInMin = calcMin(end);
+    console.log('nowInMin=' + nowInMin+' startInMin='+startInMin+' endInMin='+endInMin);
+	if (nowInMin>=startInMin && nowInMin<=endInMin){
+      console.log('shown: ' + webpageArray[i][2]);
+	  webPageToShowNew.push(webpageArray[i][2]);
+	}else{
+	  console.log('blocked: ' + webpageArray[i][2]);
+	}
+  }
+  webPageToShow = webPageToShowNew;
+  console.log(webPageToShow);
+}
+
+function calcMin(time){
+  var timeArr = time.split(':');
+  var result = (parseInt(timeArr[0]) * 60) + parseInt(timeArr[1]);
+  console.log('time=' + time + ' result=' + result);
+  return result;
+}
 
 </script>
 
