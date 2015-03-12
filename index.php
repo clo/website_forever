@@ -2,49 +2,64 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
 <title>Erich Zbinden Hallenturnier 2015</title> 
+<script type="text/javascript" src="etc/config.js"></script>
 <script>
 
 var debug = false;
-var timer=10;
+var timer=15;
 var count=timer;
 var i=0;
-var webpageArray = [
-  // from, to,    ,url
-  ['05:00','22:00','http://localhost/joomla_hallenturnier/index.php/impressionen/impressionen-2014/impressionen-june'],
-  ['05:00','22:00','http://localhost/joomla_hallenturnier/index.php/impressionen/impressionen-2014/impressionen-junf'],
-  //['12:00','22:00','http://localhost/joomla_hallenturnier/index.php/impressionen-2015/impressionen-june'],
-  //['12:00','22:00','http://localhost/joomla_hallenturnier/index.php/impressionen-2014/impressionen-junf'],
-  
-  // Sponsoren
-  ['05:00','22:00','http://localhost/joomla_hallenturnier/index.php/sponsoren'],
-  
-  // Spielbetrieb
-  // Vorrunde
-  ['06:50','22:10','http://localhost/joomla_hallenturnier/index.php/spielbetrieb/spielbetrieb-vorrunde'],
-  ['13:45','22.00','http://localhost/joomla_hallenturnier/index.php/spielbetrieb/rangliste-vorrunde'],
-  
-  // Final
-  ['16:20','22:00','http://localhost/joomla_hallenturnier/index.php/spielbetrieb/spielbetrieb-final'],
-  
-  // Schlussrangliste
-  ['16:30','22:00','http://localhost/joomla_hallenturnier/index.php/spielbetrieb/schlussrangliste'],
-  
-  // Essensplan
-  ['10:00','22:00','http://localhost/joomla_hallenturnier/index.php/essensplan'],
-];
 var webPageToShow = [];
 
 setInterval(openUrl, timer * 1000); // Wait 10 seconds
 setInterval(buildArray,5000);
+
+function fadeOut(el, duration) {
+  var step = 10 / duration;
+  var opacity = 1;
+  function next() {
+    if (opacity <= 0) { 
+	  //el.style.opacity = 1;
+	  return; 
+	}
+    el.style.opacity = ( opacity -= step );
+    setTimeout(next, 10);
+	console.log('fadeOut opacity=' + opacity);
+  }
+  next();
+}
+
+function fadeIn(el, duration){
+  var step = 10 / duration;
+  var opacity = 0;
+  function next() {
+    if (opacity >= 1) { 
+	  //el.style.opacity = 1;
+	  return; 
+	}
+    el.style.opacity = ( opacity += step );
+    setTimeout(next, 10);
+	console.log('fadeIn opacity=' + opacity);
+  }
+  next();
+}
+
 function openUrl(){
    console.log('i=' + i + ' = ' + webPageToShow[i]);
    if (i>=webPageToShow.length){
      i=0;
    }
    var iframe = document.getElementById('myframe');
+   
+   //fadeOut(iframe,1000);
+   
    iframe.src = webPageToShow[i];  
+   
+   //fadeIn(iframe,1000);
+   //iframe.style.opacity = 1;
+   
    if (debug){
-     document.getElementById('debug').innerHTML = webPageToShow[i]; 
+     document.getElementById('debug').innerHTML = webPageToShow[i]; 	 
    }
  
    i++;
